@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  database:
+    image: mysql:8.0  # Image officielle MySQL
+    container_name: dms_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root  # Mot de passe root
+      MYSQL_DATABASE: dms_db  # Nom de la base de données
+    ports:
+      - "3307:3306"  # Exposer le port 3306 de MySQL
+    volumes:
+      - db_data:/var/lib/mysql  # Persistance des données
+
+  app:
+    build: .
+    container_name: dms_app
+    depends_on:
+      - database
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/dms_db  # URL de connexion à MySQL
+      SPRING_DATASOURCE_USERNAME: root  # Nom d'utilisateur de la base de données
+      SPRING_DATASOURCE_PASSWORD: root  # Mot de passe de la base de données
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update  # Mise à jour automatique de la structure de la DB
+    ports:
+      - "8080:8080"  # Exposer le port de l'application Spring Boot
+
+volumes:
+  db_data:
