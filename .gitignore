@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Ignorer les fichiers générés
+target/
+*.jar
+db_data/
