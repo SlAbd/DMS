@@ -1,4 +1,4 @@
-package com.project.dms.controllers;
+package com.project.dms.api.controllers;
 
 import com.project.dms.domains.entities.Client;
 import com.project.dms.services.ClientService;
