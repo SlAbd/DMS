@@ -1,12 +1,8 @@
 package com.project.dms.domains.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
 import java.util.List;
 
-/**
- * Classe représentant un colis expédié avec son statut, son expéditeur, son destinataire et son livreur.
- */
 @Entity
 @Getter
 @Setter
@@ -14,6 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
+@Table(name = "colis")
 public class Colis {
 
     @Id
