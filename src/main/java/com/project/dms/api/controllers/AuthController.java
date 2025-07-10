@@ -2,6 +2,7 @@ package com.project.dms.api.controllers;
 
 import com.project.dms.api.requests.LoginRequest;
 import com.project.dms.api.requests.RegisterRequest;
+import com.project.dms.api.responses.AuthResponse;
 import com.project.dms.services.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,16 +18,16 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
-        String response = authService.register(request);
-        return response.equals("Inscription réussie !") ? 
+    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
+        AuthResponse response = authService.register(request);
+        return response.getMessage().equals("Inscription réussie !") ? 
             ResponseEntity.ok(response) : ResponseEntity.badRequest().body(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest request) {
-        String response = authService.login(request);
-        return response.equals("Connexion réussie !") ? 
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
+        AuthResponse response = authService.login(request);
+        return response.getMessage().equals("Connexion réussie !") ? 
             ResponseEntity.ok(response) : ResponseEntity.status(401).body(response);
     }
 }

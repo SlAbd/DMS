@@ -27,8 +27,25 @@ export default function AuthForm() {
     try {
       // Make the API call using axios instance
       const response = await instance.post("/auth/login", loginData)
-      console.log(response.data)
-      navigate("/dashboard")
+
+      // Store token and user info in localStorage
+      localStorage.setItem('token', response.data.token)
+      localStorage.setItem('user', JSON.stringify({
+        id: response.data.userId,
+        nom: response.data.nom,
+        email: response.data.email,
+        role: response.data.role
+      }))
+
+      // Navigate to the appropriate dashboard based on role
+      if (response.data.role === 'ADMIN') {
+        navigate("/admin/dashboard")
+      } else if (response.data.role === 'LIVREUR') {
+        navigate("/livreur/dashboard")
+      } else {
+        navigate("/client/dashboard")
+      }
+
       return { success: true }
     } catch (error) {
       console.error("Error during login:", error)
@@ -46,7 +63,25 @@ export default function AuthForm() {
     }
     try {
       const response = await instance.post("/auth/register", registerData)
-      console.log(response.data)
+
+      // Store token and user info in localStorage
+      localStorage.setItem('token', response.data.token)
+      localStorage.setItem('user', JSON.stringify({
+        id: response.data.userId,
+        nom: response.data.nom,
+        email: response.data.email,
+        role: response.data.role
+      }))
+
+      // After registration, navigate to the appropriate dashboard based on role
+      if (response.data.role === 'ADMIN') {
+        navigate("/admin/dashboard")
+      } else if (response.data.role === 'LIVREUR') {
+        navigate("/livreur/dashboard")
+      } else {
+        navigate("/client/dashboard")
+      }
+
       return { success: true }
     } catch (error) {
       console.error("Error during registration:", error)
@@ -189,4 +224,3 @@ export default function AuthForm() {
     </div>
   )
 }
-

@@ -8,9 +8,12 @@ export default function Navbar(){
         { path: '/orders', label: 'Orders', icon: Package },
         { path: '/drivers', label: 'Drivers', icon: Truck },
       ];
-    
-      const handleSignOut = async () => {
-        await signOut();
+
+      const handleSignOut = () => {
+        // Clear token and user info from localStorage
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        // Navigate to login page
         navigate('/');
       };
     return (
@@ -23,7 +26,7 @@ export default function Navbar(){
                  <span className="text-xl font-bold text-gray-900">DeliveryMS</span>
                </Link>
              </div>
-             
+
              <div className="flex items-center space-x-4">
                <div className="flex space-x-4">
                  {navItems.map(({ path, label, icon: Icon }) => (
@@ -41,7 +44,7 @@ export default function Navbar(){
                    </Link>
                  ))}
                </div>
-   
+
                <div className="flex items-center space-x-4">
                  <span className="text-sm text-gray-600"></span>
                  <button
