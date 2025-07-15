@@ -1,6 +1,7 @@
 package com.project.dms.api.controllers;
 
 import com.project.dms.domains.entities.Client;
+import com.project.dms.domains.entities.Colis;
 import com.project.dms.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -33,5 +34,10 @@ public class ClientController {
     @DeleteMapping("/{id}")
     public void deleteClient(@PathVariable Long id) {
         clientService.deleteClient(id);
+    }
+
+    @PutMapping("/{id}/password")
+    public boolean updatePassword(@PathVariable Long id ,@PathVariable String motDePasse) {
+        return clientService.updatePassword(id,motDePasse);
     }
 }
