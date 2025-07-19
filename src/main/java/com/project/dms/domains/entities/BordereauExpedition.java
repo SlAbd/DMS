@@ -1,5 +1,6 @@
 package com.project.dms.domains.entities;
 
+import com.project.dms.domains.enums.Statut_Colis;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -21,7 +22,7 @@ public class BordereauExpedition {
     private String adresseLivraison;
 
     @Column(nullable = false)
-    private String statut; // Ex : "En cours", "Livré", "Annulé"
+    private Statut_Colis statut; // Ex : "En cours", "Livré", "Annulé"
 
     
     @Column(nullable = true)
@@ -33,7 +34,7 @@ public class BordereauExpedition {
 
     public BordereauExpedition() {}
 
-    public BordereauExpedition(String numeroBordereau, LocalDate dateExpedition, String adresseLivraison, String statut, Colis colis,  String lienPdf) {
+    public BordereauExpedition(String numeroBordereau, LocalDate dateExpedition, String adresseLivraison, Statut_Colis statut, Colis colis, String lienPdf) {
         this.numeroBordereau = numeroBordereau;
         this.dateExpedition = dateExpedition;
         this.adresseLivraison = adresseLivraison;
@@ -56,8 +57,8 @@ public class BordereauExpedition {
     public String getAdresseLivraison() { return adresseLivraison; }
     public void setAdresseLivraison(String adresseLivraison) { this.adresseLivraison = adresseLivraison; }
 
-    public String getStatut() { return statut; }
-    public void setStatut(String statut) { this.statut = statut; }
+    public Statut_Colis getStatut() { return statut; }
+    public void setStatut(Statut_Colis statut) { this.statut = statut; }
 
     public Colis getColis() { return colis; }
     public void setColis(Colis colis) { this.colis = colis; }

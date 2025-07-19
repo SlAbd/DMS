@@ -2,6 +2,7 @@ package com.project.dms.domains.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import com.project.dms.domains.enums.Statut_Colis;
 
 import java.util.List;
 
@@ -23,17 +24,14 @@ public class Colis {
     private String description;
 
     /** Statut actuel du colis */
-    private String statut;
+    /**private String statut;*/
 
     /** Relation avec l'expéditeur (Client) */
     @ManyToOne
     @JoinColumn(name = "expediteur_id", nullable = false)
     private Client expediteur;
 
-    /** Relation avec le destinataire (Client) */
-    @ManyToOne
-    @JoinColumn(name = "destinataire_id", nullable = false)
-    private Client destinataire;
+
 
 
     /** Historique des statuts du colis */
@@ -43,4 +41,15 @@ public class Colis {
     /** Relation avec la livraison */
     @OneToOne(mappedBy = "colis", cascade = CascadeType.ALL)
     private Livraison livraison;
+
+    /** Numero de suivi de coli **/
+    @Column(unique = true, nullable = false)
+    private String numeroSuivi;
+
+    @Enumerated(EnumType.STRING)
+    private Statut_Colis statut =  Statut_Colis.EN_ATTENTE;
+
+
+    public void setLivreur(Livreur livreur) {
+    }
 }

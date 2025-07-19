@@ -13,6 +13,7 @@ import lombok.*;
 @DiscriminatorValue("LIVREUR")
 public class Livreur extends User {
     private String adresse;
+    private String prenom;
     private String telephone;
     private String vehicule;
     private boolean disponibilite;

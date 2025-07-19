@@ -1,20 +1,23 @@
 package com.project.dms.api.controllers;
 
 
+import com.project.dms.api.requests.LivreurRequest;
 import com.project.dms.domains.entities.Livreur;
 import com.project.dms.services.LivreurService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/livreurs")
+@RequestMapping("/livreurs")
 public class LivreurController {
 
     @Autowired
     private LivreurService livreurService;
+
 
     @GetMapping
     public List<Livreur> getAllLivreurs() {
@@ -26,13 +29,18 @@ public class LivreurController {
         return livreurService.getLivreurById(id);
     }
 
-    @PostMapping
+    @PostMapping("/save")
     public Livreur saveLivreur(@RequestBody Livreur livreur) {
         return livreurService.saveLivreur(livreur);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteLivreur(@PathVariable Long id) {
-        livreurService.deleteLivreur(id);
+    public void deleteLivreur(@PathVariable Long id) {livreurService.deleteLivreur(id);}
+
+    @PostMapping
+    public void createLivreur(@RequestBody LivreurRequest request) {
+        Livreur livreur = livreurService.creerLivreur(request);
+
     }
+
 }

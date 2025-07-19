@@ -1,11 +1,12 @@
 package com.project.dms.domains.enums;
 
 public enum Statut_Colis {
+    EN_ATTENTE("En attende"),
     EN_PREPARATION("En préparation"),
     EN_TRANSIT("En transit"),
     LIVRE("Livré"),
     ANNULE("Annulé"),
-    EN_RETOUR("En retour");
+    EN_RETOUR("En retour"), ;
 
     private final String libelle;
 
