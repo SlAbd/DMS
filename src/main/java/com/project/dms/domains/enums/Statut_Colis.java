@@ -1,22 +1,11 @@
 package com.project.dms.domains.enums;
 
 public enum Statut_Colis {
-    EN_ATTENTE("En attende"),
-    EN_PREPARATION("En préparation"),
-    EN_TRANSIT("En transit"),
-    LIVRE("Livré"),
-    ANNULE("Annulé"),
-    EN_RETOUR("En retour"), ;
-
-    private final String libelle;
-
-    Statut_Colis(String libelle) {
-        this.libelle = libelle;
-    }
-
-    public String getLibelle() {
-        return libelle;
-    }
+    EN_ATTENTE,
+    EN_COURS,
+    LIVRE,
+    ANNULE,
+    EN_RETOUR
 }
 /*Explication :
 EN_PREPARATION : Le colis est en cours de préparation avant l’expédition.

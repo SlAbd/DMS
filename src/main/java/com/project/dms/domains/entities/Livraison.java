@@ -1,36 +1,32 @@
 package com.project.dms.domains.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 
-/**
- * Classe représentant une livraison associée à un colis et un livreur.
- */
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = "colis") // Évite les problèmes de récursion infinie
-@EqualsAndHashCode(exclude = "colis")
+@ToString(exclude = {"colis", "livreur"})
+@EqualsAndHashCode(exclude = {"colis", "livreur"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Livraison {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /** Date estimée de livraison */
     private LocalDate dateEstimee;
 
-    /** Relation avec le colis */
-    @OneToOne
+    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "colis_id", nullable = false)
     private Colis colis;
 
-    /** Relation avec le livreur */
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "livreur_id", nullable = false)
     private Livreur livreur;
 }

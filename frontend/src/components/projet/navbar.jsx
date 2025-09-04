@@ -4,9 +4,9 @@ import { Link, useNavigate } from "react-router-dom";
 export default function Navbar(){
     const navigate = useNavigate();
       const navItems = [
-        { path: '/', label: 'Dashboard', icon: BarChart2 },
-        { path: '/orders', label: 'Orders', icon: Package },
-        { path: '/drivers', label: 'Drivers', icon: Truck },
+        { path: '/admin/dashboard', label: 'Livraisons', icon: BarChart2 },
+        { path: '/admin/orders', label: 'Colis', icon: Package },
+        { path: '/admin/drivers', label: 'Livreur', icon: Truck },
       ];
 
       const handleSignOut = () => {
@@ -23,7 +23,7 @@ export default function Navbar(){
              <div className="flex items-center">
                <Link to="/" className="flex items-center space-x-2">
                  <Package className="h-8 w-8 text-blue-600" />
-                 <span className="text-xl font-bold text-gray-900">DeliveryMS</span>
+                 <span className="text-xl font-bold text-gray-900">TrDeL</span>
                </Link>
              </div>
 
@@ -52,7 +52,7 @@ export default function Navbar(){
                    className="flex items-center space-x-1 text-gray-600 hover:text-red-600"
                  >
                    <LogOut className="h-5 w-5" />
-                   <span className="text-sm">Sign Out</span>
+                   <span className="text-sm">Déconnecté</span>
                  </button>
                </div>
              </div>

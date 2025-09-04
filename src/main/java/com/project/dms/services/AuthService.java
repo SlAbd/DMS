@@ -54,7 +54,7 @@ public class AuthService {
         newUser.setNom(request.nom());
         newUser.setEmail(request.email());
         newUser.setMotDePasse(passwordEncoder.encode(request.motDePasse())); // Mot de passe sécurisé
-        newUser.setRole(request.role() != null ? request.role() : Role.CLIENT); // Par défaut CLIENT
+        newUser.setRole(request.role() != null ? request.role() : Role.ADMIN); // Par défaut ADMIN
 
         User savedUser = userRepository.save(newUser);
 

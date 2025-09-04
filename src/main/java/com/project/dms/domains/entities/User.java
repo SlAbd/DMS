@@ -13,7 +13,8 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
+// @DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
+
 public class User {
 
     @Id
