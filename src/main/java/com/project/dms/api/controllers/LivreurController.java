@@ -5,11 +5,13 @@ import com.project.dms.api.exceptions.LivreurNotFoundException;
 import com.project.dms.api.requests.LivreurRequest;
 import com.project.dms.api.responses.LivreurResponse;
 import com.project.dms.domains.entities.Livreur;
+import com.project.dms.repositories.LivreurRepository;
 import com.project.dms.services.LivreurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -18,16 +20,25 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/livreurs")
+@RequestMapping("/livreur")
 public class LivreurController {
 
     @Autowired
     private LivreurService livreurService;
 
 
-    @GetMapping
+    @GetMapping("/livreurs")
     public List<Livreur> getAllLivreurs() {
         return livreurService.getAllLivreurs();
+    }
+
+    @GetMapping("/livreurs-disponible")
+    public List<Livreur> getAllLivreursDisponible() {
+        return livreurService.getAllDisponible() ;
+    }
+    @GetMapping("/livreurs-non-disponible")
+    public List<Livreur> getAllLivreursNonDisponible() {
+        return livreurService.getAllNonDisponible()
     }
 
     @GetMapping("/{id}")
@@ -46,9 +57,13 @@ public class LivreurController {
     }
 
     @PostMapping("/creer")
-    public void createLivreur(@RequestBody LivreurRequest request) {
-        Livreur livreur = livreurService.creerLivreur(request);
-
+    public ResponseEntity<?> createLivreur(@RequestBody LivreurRequest request) {
+        try {
+            Livreur livreur = livreurService.creerLivreur(request);
+            return ResponseEntity.ok(livreur);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
     }
 
     // GET - Récupérer tous les livreurs disponibles
@@ -264,16 +279,88 @@ public class LivreurController {
 
         return null;
     }
+
+    // Endpoint pour l'authentification des livreurs avec identifiantLivreur
+    //@PostMapping("/login")
+    /*ublic ResponseEntity<?> loginLivreur(@RequestBody Map<String, String> credentials) {
+        try {
+            String identifiantLivreur = credentials.get("identifiantLivreur");
+            String email = credentials.get("email");
+
+            if (identifiantLivreur == null || email == null) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("error", "Identifiant et mot de passe requis"));
+            }
+
+            // Rechercher le livreur par son identifiant en utilisant le service
+            Optional<Livreur> livreurOpt = livreurService.getLivreurByIdentifiantLivreur(identifiantLivreur);
+
+            if (livreurOpt.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("error", "Identifiant ou mot de passe incorrect"));
+            }
+
+            Livreur livreur = livreurOpt.get();
+
+            // Vérifier le mot de passe en utilisant le service
+            /*if (!livreurService.verifierMotDePasse(livreur, email)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("error", "Identifiant ou mot de passe incorrect"));
+            }*/
+
+            // Créer une réponse avec les informations du livreur
+         /*LivreurResponse response = new LivreurResponse(livreur);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Erreur lors de l'authentification", 
+                                 "message", e.getMessage()));
+        }
+    }*/
+
+    @PostMapping("/verifier-email")
+    public ResponseEntity<?> verifierEmail(@RequestBody Map<String, String> payload) {
+        String email = payload.get("email");
+
+        if (email == null || email.isBlank()) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Email requis"));
+        }
+
+        Optional<Livreur> livreurOpt = livreurService.getLivreurByEmail(email);
+        if (livreurOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "Email introuvable"));
+        }
+
+        // Optionnel : ne renvoyer que des infos minimales
+        return ResponseEntity.ok(Map.of(
+                "message", "Email valide",
+                "identifiantLivreur", livreurOpt.get().getIdentifiantLivreur()
+        ));
+    }
+
+    @PostMapping("/verifier-identifiant")
+    public ResponseEntity<?> verifierIdentifiant(@RequestBody Map<String, String> payload) {
+        String identifiant = payload.get("identifiantLivreur");
+
+        if (identifiant == null || identifiant.isBlank()) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Identifiant requis"));
+        }
+
+        Optional<Livreur> livreurOpt = livreurService.getLivreurByIdentifiantLivreur(identifiant);
+
+        if (livreurOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Identifiant incorrect"));
+        }
+
+        Livreur livreur = livreurOpt.get();
+        return ResponseEntity.ok(new LivreurResponse(livreur));
+    }
+
+
+
 }
-
-
-
-
-
-
-
-
-
-
-
-

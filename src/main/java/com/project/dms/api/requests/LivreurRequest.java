@@ -1,4 +1,11 @@
 package com.project.dms.api.requests;
 
-public record LivreurRequest(String email, String nom, String prenom, boolean disponibilite, String motDePasse) {
+public record LivreurRequest(
+        String email,
+        String nom,
+        String prenom
+        //boolean disponibilite
+        // String motDePasse
+        )
+{
 }

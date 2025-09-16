@@ -20,6 +20,7 @@ import LivreurPage from './pages/livreur/LivreurPage';
 import HomePage from './pages/HomePage';
 import LivreurHome from './pages/livreur/LivreurHome';
 import Sidebar from './components/projet/sidebar';
+import LivreurAuthContainer from './pages/livreur/LivreurAuthContainer';
 
 export default function App() {
     return (
@@ -31,7 +32,7 @@ export default function App() {
                 <Route path="/register" element={<RegisterForm />} />
 
                 {/* Page d'accueil livreur */}
-                <Route path="/livreur" element={<LivreurHome />} />
+                <Route path="/livreur" element={<LivreurAuthContainer />} />
 
                 <Route path="/admin/orders" element={
                     <> 

@@ -5,6 +5,7 @@ import com.project.dms.api.exceptions.LivreurNotFoundException;
 import com.project.dms.api.requests.LivreurRequest;
 import com.project.dms.api.responses.LivreurDisponibleResponse;
 import com.project.dms.domains.entities.Livreur;
+import com.project.dms.domains.enums.Role;
 import com.project.dms.repositories.LivreurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,6 +26,14 @@ public class LivreurService {
     public List<Livreur> getAllLivreurs() {
         return livreurRepository.findAll();
     }
+
+    public List<Livreur> getAllDisponible(){
+        return livreurRepository.getAllDisponibles();
+    }
+    public List<Livreur> getAllNonDisponible(){
+        return livreurRepository.getAllNonDisponibles();
+    }
+
 
     public Livreur getLivreurById(Long id) {
         return livreurRepository.findById(id)
@@ -52,13 +61,24 @@ public class LivreurService {
         livreur.setEmail(request.email());
         livreur.setNom(request.nom());
         livreur.setPrenom(request.prenom());
-        livreur.setDisponibilite(request.disponibilite());
+        livreur.setDisponibilite(true);
+        livreur.setRole(Role.LIVREUR);
+
+        // Générer l'identifiantLivreur
+        String identifiantLivreur = livreur.generateIdentifiantLivreur();
+
+        // Vérifier que l'identifiant n'existe pas déjà
+        while (livreurRepository.findByIdentifiantLivreur(identifiantLivreur).isPresent()) {
+            identifiantLivreur = livreur.generateIdentifiantLivreur(); // Régénérer si déjà existant
+        }
+
+        livreur.setIdentifiantLivreur(identifiantLivreur);
 
         // Le mot de passe sera généré automatiquement par @PrePersist
         // ou vous pouvez le setter manuellement si fourni
-        if (request.motDePasse() != null) {
+        /*if (request.motDePasse() != null) {
             livreur.setMotDePasse(passwordEncoder.encode(request.motDePasse()));
-        }
+        }*/
         livreurRepository.save(livreur);
         return livreur;
     }
@@ -109,5 +129,18 @@ public class LivreurService {
                 .orElseThrow(() -> new LivreurNotFoundException("Livreur non trouvé avec l'ID: " + id));
         return livreur.isDisponible();
     }
-}
 
+    // Trouver un livreur par son identifiantLivreur
+    public Optional<Livreur> getLivreurByIdentifiantLivreur(String identifiantLivreur) {
+        return livreurRepository.findByIdentifiantLivreur(identifiantLivreur);
+    }
+
+    // Vérifier si le mot de passe correspond
+    public boolean verifierMotDePasse(Livreur livreur, String motDePasse) {
+        return passwordEncoder.matches(motDePasse, livreur.getMotDePasse());
+    }
+    public Optional<Livreur> getLivreurByEmail(String email) {
+        return livreurRepository.findByEmail(email);
+    }
+
+}

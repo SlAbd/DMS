@@ -12,6 +12,7 @@ public class LivreurResponse {
     private String telephone;
     private String adresse;
     private Boolean disponibilite;
+    private String identifiantLivreur; // Ajout de l'identifiant unique
 
     // Constructeur par défaut (ESSENTIEL pour Jackson)
     public LivreurResponse() {
@@ -27,6 +28,7 @@ public class LivreurResponse {
             this.telephone = livreur.getTelephone();
             this.adresse = livreur.getAdresse();
             this.disponibilite = livreur.getDisponibilite();
+            this.identifiantLivreur = livreur.getIdentifiantLivreur();
         }
     }
 
@@ -51,4 +53,7 @@ public class LivreurResponse {
 
     public Boolean getDisponibilite() { return disponibilite; }
     public void setDisponibilite(Boolean disponibilite) { this.disponibilite = disponibilite; }
+
+    public String getIdentifiantLivreur() { return identifiantLivreur; }
+    public void setIdentifiantLivreur(String identifiantLivreur) { this.identifiantLivreur = identifiantLivreur; }
 }

@@ -4,10 +4,10 @@ import { useState } from "react"
 import axios from "axios"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Truck, Package, CheckCircle, Clock, MapPin, Search, Calendar, ArrowLeft, Shield, Headphones, Zap } from "lucide-react"
-import './globals.css'
+import { Truck, CheckCircle, Clock, MapPin, Search, Calendar, ArrowLeft, Shield, Headphones, Zap } from "lucide-react"
+import "./globals.css"
 
 export default function ClientDashboard() {
   const [trackingNumber, setTrackingNumber] = useState("")
@@ -24,12 +24,12 @@ export default function ClientDashboard() {
 
     try {
       const token = localStorage.getItem("token")
-      
+
       const response = await axios.get(`http://localhost:8080/colis/numero-suivi/${trackingNumber.trim()}`, {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+          "Content-Type": "application/json",
+        },
       })
 
       const colis = response.data
@@ -38,15 +38,14 @@ export default function ClientDashboard() {
       setTrackingResult({
         trackingNumber: colis.numeroSuivi,
         status: getStatusDisplay(colis.statut),
-        estimatedDelivery: colis.dateEstimee ? new Date(colis.dateEstimee).toLocaleDateString('fr-FR') : "Non estimée",
+        estimatedDelivery: colis.dateEstimee ? new Date(colis.dateEstimee).toLocaleDateString("fr-FR") : "Non estimée",
         currentLocation: getCurrentLocation(colis.statut),
         timeline: generateTimeline(colis),
-        colisDetails: colis
+        colisDetails: colis,
       })
-
     } catch (err) {
       console.error("Erreur lors du suivi:", err)
-      
+
       if (err.response?.status === 404) {
         setError("Aucun colis trouvé avec ce numéro de suivi")
       } else if (err.response?.status === 401) {
@@ -69,8 +68,8 @@ export default function ClientDashboard() {
     // Étape 1: Commande confirmée
     timeline.push({
       status: "Commande confirmée",
-      date: creationDate.toLocaleDateString('fr-FR'),
-      time: creationDate.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
+      date: creationDate.toLocaleDateString("fr-FR"),
+      time: creationDate.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }),
       completed: true,
     })
 
@@ -78,7 +77,7 @@ export default function ClientDashboard() {
     const shippedDate = new Date(creationDate.getTime() + 24 * 60 * 60 * 1000)
     timeline.push({
       status: "Colis expédié",
-      date: shippedDate.toLocaleDateString('fr-FR'),
+      date: shippedDate.toLocaleDateString("fr-FR"),
       time: "09:00",
       completed: colis.statut !== "EN_ATTENTE",
     })
@@ -87,16 +86,18 @@ export default function ClientDashboard() {
     const transitDate = new Date(creationDate.getTime() + 48 * 60 * 60 * 1000)
     timeline.push({
       status: "En transit",
-      date: transitDate.toLocaleDateString('fr-FR'),
+      date: transitDate.toLocaleDateString("fr-FR"),
       time: "14:30",
       completed: colis.statut === "EN_COURS" || colis.statut === "LIVRE",
     })
 
     // Étape 4: Livraison
-    const deliveryDate = colis.dateEstimee ? new Date(colis.dateEstimee) : new Date(creationDate.getTime() + 72 * 60 * 60 * 1000)
+    const deliveryDate = colis.dateEstimee
+      ? new Date(colis.dateEstimee)
+      : new Date(creationDate.getTime() + 72 * 60 * 60 * 1000)
     timeline.push({
       status: colis.statut === "LIVRE" ? "Livré" : "Livraison prévue",
-      date: deliveryDate.toLocaleDateString('fr-FR'),
+      date: deliveryDate.toLocaleDateString("fr-FR"),
       time: colis.statut === "LIVRE" ? "12:00" : "Estimé",
       completed: colis.statut === "LIVRE",
     })
@@ -153,7 +154,7 @@ export default function ClientDashboard() {
                 <Truck className="h-6 w-6 text-primary" />
               </div>
               <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-                TrDeL
+                GoDeliver
               </h1>
             </div>
             <nav className="hidden md:flex items-center gap-6">
@@ -166,23 +167,24 @@ export default function ClientDashboard() {
       </header>
 
       {/* Hero Section with Image */}
-      <section className="relative bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+      <section className="relative bg-gradient-to-r from-green-600 to-green-800 text-white py-16">
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute left-0 top-0 w-1/3 h-full bg-gradient-to-r from-blue-600/30 to-transparent"></div>
+          <div className="absolute left-0 top-0 w-1/3 h-full bg-gradient-to-r from-green-600/30 to-transparent"></div>
           <div className="absolute right-0 top-0 w-2/3 h-full">
             <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1596526131083-e8c633c3c6ce?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80')] bg-cover bg-center mix-blend-overlay opacity-20"></div>
           </div>
         </div>
-        
+
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Suivez votre <span className="text-yellow-300">livraison</span> en temps réel
+              Suivez votre <span className="text-orange-300">livraison</span> en temps réel
             </h2>
-            <p className="text-xl text-blue-100 mb-8">
-              Obtenez des mises à jour instantanées sur l'emplacement de votre colis et une estimation précise de sa livraison
+            <p className="text-xl text-green-100 mb-8">
+              Obtenez des mises à jour instantanées sur l'emplacement de votre colis et une estimation précise de sa
+              livraison
             </p>
-            
+
             <div className="bg-white/10 backdrop-blur-md p-6 rounded-xl shadow-lg">
               <div className="flex flex-col sm:flex-row gap-4">
                 <div className="relative flex-1">
@@ -198,11 +200,11 @@ export default function ClientDashboard() {
                 <Button
                   onClick={handleTrack}
                   disabled={!trackingNumber.trim() || isLoading}
-                  className="bg-yellow-400 hover:bg-yellow-500 text-blue-900 py-3 px-6 font-bold transition-all duration-300 shadow-md"
+                  className="bg-orange-400 hover:bg-orange-500 text-green-900 py-3 px-6 font-bold transition-all duration-300 shadow-md"
                 >
                   {isLoading ? (
                     <>
-                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-900 mr-2"></div>
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-green-900 mr-2"></div>
                       Recherche...
                     </>
                   ) : (
@@ -215,7 +217,6 @@ export default function ClientDashboard() {
         </div>
       </section>
 
-      
       {/* Tracking Results Section */}
       <section className="py-16 bg-white" id="tracking-results">
         <div className="container mx-auto px-4">
@@ -231,10 +232,7 @@ export default function ClientDashboard() {
                     </div>
                     <h3 className="text-lg font-medium text-red-800 mb-2">Erreur</h3>
                     <p className="text-red-600">{error}</p>
-                    <Button
-                      onClick={resetTracking}
-                      className="mt-4 bg-red-600 hover:bg-red-700"
-                    >
+                    <Button onClick={resetTracking} className="mt-4 bg-red-600 hover:bg-red-700">
                       Réessayer
                     </Button>
                   </div>
@@ -245,7 +243,7 @@ export default function ClientDashboard() {
             {trackingResult && (
               <div className="space-y-6 animate-fade-in">
                 {/* Back button */}
-                <button 
+                <button
                   onClick={resetTracking}
                   className="flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors mb-2"
                 >
@@ -255,14 +253,14 @@ export default function ClientDashboard() {
 
                 {/* Status Overview */}
                 <Card className="shadow-lg border-0 overflow-hidden">
-                  <div className="bg-gradient-to-r from-primary to-blue-600 h-2 w-full"></div>
+                  <div className="bg-gradient-to-r from-green-600 to-green-700 h-2 w-full"></div>
                   <CardHeader>
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                       <CardTitle className="text-xl">
-                        Colis <span className="text-primary">#{trackingResult.trackingNumber}</span>
+                        Colis <span className="text-green-600">#{trackingResult.trackingNumber}</span>
                       </CardTitle>
-                      <Badge 
-                        className="text-sm py-1 px-3 bg-primary/10 text-primary border-primary/20 self-start md:self-auto"
+                      <Badge
+                        className="text-sm py-1 px-3 bg-green-50 text-green-700 border-green-200 self-start md:self-auto"
                         variant="outline"
                       >
                         {trackingResult.status}
@@ -272,8 +270,8 @@ export default function ClientDashboard() {
                   <CardContent>
                     <div className="grid md:grid-cols-2 gap-6">
                       <div className="flex items-start gap-4 p-3 bg-slate-50 rounded-lg">
-                        <div className="p-2 bg-blue-100 rounded-full">
-                          <MapPin className="h-5 w-5 text-blue-600" />
+                        <div className="p-2 bg-green-100 rounded-full">
+                          <MapPin className="h-5 w-5 text-green-600" />
                         </div>
                         <div>
                           <p className="font-medium text-sm text-muted-foreground">Position actuelle</p>
@@ -281,8 +279,8 @@ export default function ClientDashboard() {
                         </div>
                       </div>
                       <div className="flex items-start gap-4 p-3 bg-slate-50 rounded-lg">
-                        <div className="p-2 bg-green-100 rounded-full">
-                          <Calendar className="h-5 w-5 text-green-600" />
+                        <div className="p-2 bg-orange-100 rounded-full">
+                          <Calendar className="h-5 w-5 text-orange-600" />
                         </div>
                         <div>
                           <p className="font-medium text-sm text-muted-foreground">Livraison estimée</p>
@@ -302,7 +300,7 @@ export default function ClientDashboard() {
                     <div className="relative">
                       {/* Vertical line */}
                       <div className="absolute left-7 top-2 h-[calc(100%-1rem)] w-0.5 bg-border -z-10"></div>
-                      
+
                       <div className="space-y-8">
                         {trackingResult.timeline.map((event, index) => (
                           <div key={index} className="flex items-start gap-6">
@@ -317,8 +315,12 @@ export default function ClientDashboard() {
                                 </div>
                               )}
                             </div>
-                            <div className={`flex-1 pb-8 ${index === trackingResult.timeline.length - 1 ? 'pb-0' : ''}`}>
-                              <p className={`font-medium ${event.completed ? "text-foreground" : "text-muted-foreground"}`}>
+                            <div
+                              className={`flex-1 pb-8 ${index === trackingResult.timeline.length - 1 ? "pb-0" : ""}`}
+                            >
+                              <p
+                                className={`font-medium ${event.completed ? "text-foreground" : "text-muted-foreground"}`}
+                              >
                                 {event.status}
                               </p>
                               <p className="text-sm text-muted-foreground mt-1">
@@ -350,34 +352,49 @@ export default function ClientDashboard() {
                         </div>
                         <div>
                           <p className="text-sm text-muted-foreground">Expéditeur téléphone</p>
-                          <p className="font-medium">{trackingResult.colisDetails.expideteurTelephone || "Non spécifié"}</p>
+                          <p className="font-medium">
+                            {trackingResult.colisDetails.expideteurTelephone || "Non spécifié"}
+                          </p>
                         </div>
                         <div>
                           <p className="text-sm text-muted-foreground">Expéditeur adresse</p>
-                          <p className="font-medium">{trackingResult.colisDetails.expideteurAdresse || "Non spécifié"}</p>
+                          <p className="font-medium">
+                            {trackingResult.colisDetails.expideteurAdresse || "Non spécifié"}
+                          </p>
                         </div>
                         <div>
                           <p className="text-sm text-muted-foreground">Poids de colis</p>
-                          <p className="font-medium">{trackingResult.colisDetails.poids ? `${trackingResult.colisDetails.poids} kg` : "Non spécifié"}</p>
+                          <p className="font-medium">
+                            {trackingResult.colisDetails.poids
+                              ? `${trackingResult.colisDetails.poids} kg`
+                              : "Non spécifié"}
+                          </p>
                         </div>
                         <div></div>
                         <div>
                           <p className="text-sm text-muted-foreground">Destinataire pay</p>
-                          <p className="font-medium">{trackingResult.colisDetails.destinatairePays || "Non spécifié"}</p>
+                          <p className="font-medium">
+                            {trackingResult.colisDetails.destinatairePays || "Non spécifié"}
+                          </p>
                         </div>
                         <div>
                           <p className="text-sm text-muted-foreground">Destinataire ville</p>
-                          <p className="font-medium">{trackingResult.colisDetails.destinataireVille || "Non spécifié"}</p>
+                          <p className="font-medium">
+                            {trackingResult.colisDetails.destinataireVille || "Non spécifié"}
+                          </p>
                         </div>
                         <div>
                           <p className="text-sm text-muted-foreground">Destinataire téléphone</p>
-                          <p className="font-medium">{trackingResult.colisDetails.destinataireTelephone || "Non spécifié"}</p>
+                          <p className="font-medium">
+                            {trackingResult.colisDetails.destinataireTelephone || "Non spécifié"}
+                          </p>
                         </div>
                         <div>
                           <p className="text-sm text-muted-foreground">Destinataire adresse</p>
-                          <p className="font-medium">{trackingResult.colisDetails.destinataireAdresse || "Non spécifié"}</p>
+                          <p className="font-medium">
+                            {trackingResult.colisDetails.destinataireAdresse || "Non spécifié"}
+                          </p>
                         </div>
-                        
                       </div>
                     </CardContent>
                   </Card>
@@ -388,36 +405,35 @@ export default function ClientDashboard() {
         </div>
       </section>
 
-
       {/* Features Section */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
-          <h3 className="text-3xl font-bold text-center mb-12">Pourquoi choisir TrDeL ?</h3>
-          
+          <h3 className="text-3xl font-bold text-center mb-12">Pourquoi choisir GoDeliver ?</h3>
+
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center p-6 rounded-lg hover:shadow-md transition-shadow">
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Zap className="h-8 w-8 text-blue-600" />
+              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Zap className="h-8 w-8 text-green-600" />
               </div>
               <h4 className="text-xl font-semibold mb-2">Suivi en temps réel</h4>
               <p className="text-muted-foreground">
                 Obtenez des mises à jour instantanées sur chaque étape du trajet de votre colis.
               </p>
             </div>
-            
+
             <div className="text-center p-6 rounded-lg hover:shadow-md transition-shadow">
-              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Shield className="h-8 w-8 text-green-600" />
+              <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Shield className="h-8 w-8 text-orange-600" />
               </div>
               <h4 className="text-xl font-semibold mb-2">Sécurité garantie</h4>
               <p className="text-muted-foreground">
                 Vos colis sont entre de bonnes mains avec notre système de suivi sécurisé.
               </p>
             </div>
-            
+
             <div className="text-center p-6 rounded-lg hover:shadow-md transition-shadow">
-              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Headphones className="h-8 w-8 text-purple-600" />
+              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Headphones className="h-8 w-8 text-green-600" />
               </div>
               <h4 className="text-xl font-semibold mb-2">Support 24/7</h4>
               <p className="text-muted-foreground">
@@ -427,7 +443,6 @@ export default function ClientDashboard() {
           </div>
         </div>
       </section>
-
     </div>
   )
 }

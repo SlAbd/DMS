@@ -3,6 +3,7 @@ package com.project.dms.repositories;
 
 import com.project.dms.domains.entities.Livreur;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -33,4 +34,12 @@ public interface LivreurRepository extends JpaRepository<Livreur, Long> {
     // Compter les livreurs disponibles
     long countByDisponibiliteTrue();
 
+    @Query("select l from Livreur l where l.disponibilite == true")
+    List<Livreur> getAllDisponibles();
+    @Query("select l from Livreur l where l.disponibilite == false ")
+    List<Livreur> getAllNonDisponibles();
+
+
+    // Trouver un livreur par son identifiantLivreur
+    Optional<Livreur> findByIdentifiantLivreur(String identifiantLivreur);
 }

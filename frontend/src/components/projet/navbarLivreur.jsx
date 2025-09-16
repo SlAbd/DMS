@@ -23,7 +23,7 @@ export default function NavbarLivreur(){
              <div className="flex items-center">
                <Link to="/" className="flex items-center space-x-2">
                  <Package className="h-8 w-8 text-blue-600" />
-                 <span className="text-xl font-bold text-gray-900">TrDeL</span>
+                 <span className="text-xl font-bold text-gray-900">GoDeliver</span>
                </Link>
              </div>
 

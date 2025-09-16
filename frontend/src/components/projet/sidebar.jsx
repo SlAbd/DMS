@@ -25,7 +25,7 @@ export default function Sidebar() {
             <div className="p-6 border-b border-gray-200">
                 <Link to="/" className="flex items-center space-x-3">
                     <Package className="h-8 w-8 text-blue-600" />
-                    <span className="text-xl font-bold text-gray-900">TrDeL</span>
+                    <span className="text-xl font-bold text-gray-900">GoDeliver</span>
                 </Link>
             </div>
 

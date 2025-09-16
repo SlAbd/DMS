@@ -12,6 +12,7 @@ public class LivreurDisponibleResponse {
     private String telephone;
     private String adresse;
     private boolean disponibilite;
+    private String identifiantLivreur; // Ajout de l'identifiant unique
 
     public LivreurDisponibleResponse(Livreur livreur) {
         this.id = livreur.getId();
@@ -21,5 +22,6 @@ public class LivreurDisponibleResponse {
         this.telephone = livreur.getTelephone();
         this.adresse = livreur.getAdresse();
         this.disponibilite = livreur.getDisponibilite();
+        this.identifiantLivreur = livreur.getIdentifiantLivreur();
     }
 }

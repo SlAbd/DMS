@@ -22,22 +22,15 @@ public class Livreur extends User {
     private String adresse;
     private String prenom;
     private String telephone;
-    private String motDePasse;
-    // Méthode setter pour la disponibilité
     // private String vehicule;
     private boolean disponibilite;
+    private String identifiantLivreur; // Identifiant unique pour l'authentification
 
     public Boolean getDisponibilite() {
         return disponibilite;
     }
 
-    // Méthode pour générer un mot de passe automatique
-    @PrePersist
-    public void generatePassword() {
-        if (this.motDePasse == null) {
-            this.motDePasse = generateRandomPassword();
-        }
-    }
+
 
     public void setDisponible(boolean disponibilite) { this.disponibilite = disponibilite; }
 
@@ -90,4 +83,21 @@ public class Livreur extends User {
         this.disponibilite = !this.disponibilite;
     }
 
+    // Méthode pour générer l'identifiantLivreur
+    public String generateIdentifiantLivreur() {
+        if (this.getNom() == null || this.getNom().isEmpty()) {
+            throw new IllegalStateException("Le nom du livreur doit être défini avant de générer l'identifiant");
+        }
+
+        // Prendre les 3 premiers caractères du nom (ou le nom complet si moins de 3 caractères)
+        String nomPrefix = this.getNom().length() > 3 ? 
+                           this.getNom().substring(0, 3).toUpperCase() : 
+                           this.getNom().toUpperCase();
+
+        // Générer 4 chiffres aléatoires
+        Random random = new Random();
+        int randomNumber = 1000 + random.nextInt(9000); // Nombre entre 1000 et 9999
+
+        return nomPrefix + randomNumber;
+    }
 }
